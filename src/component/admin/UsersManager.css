@@ -1,0 +1,127 @@
+/* UserManagement.css */
+:root {
+    --sidebar-width: 250px;
+    --header-height: 60px;
+    --primary-color: #4CAF50;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --success-color: #28a745;
+}
+
+.user-management1 {
+    background-color: #f4f6f9;
+    min-height: 100vh;
+}
+
+/* Header Styles */
+.dashboard-header {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: var(--header-height);
+    background-color: white;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 1030;
+}
+
+/* Main Content */
+.main-content1 {
+    margin: 0;
+    padding: 20px;
+    padding-top: calc(var(--header-height) + 20px);
+}
+
+/* Search Box */
+.search-box {
+    position: relative;
+}
+
+.search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    width: 16px;
+    height: 16px;
+}
+
+.search-input {
+    padding-left: 35px !important;
+}
+
+/* User Info */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #666;
+}
+
+.user-name {
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.user-username {
+    font-size: 12px;
+    color: #666;
+}
+
+/* Status Badge */
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status-badge.active {
+    background-color: #e8f5e9;
+    color: var(--success-color);
+}
+
+.status-badge.inactive {
+    background-color: #ffebee;
+    color: var(--danger-color);
+}
+
+.status-badge.pending {
+    background-color: #fff3e0;
+    color: var(--warning-color);
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .main-content1 {
+        margin-left: 0;
+    }
+
+    .dashboard-header {
+        left: 0;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+}
