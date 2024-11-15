@@ -34,7 +34,6 @@ const Cart = () => {
         }
     };
     useEffect(()=> {
-        console.log(loading)
         if (!loading) {
             if (isAuthenticated === false) {
                 navigate("/login")
@@ -51,7 +50,6 @@ const Cart = () => {
         setTotal(totalPrice)
     },[chooseList])
     const calTotal = (data) => {
-        console.log("dang thay doi")
         if (data.check === true) {
             setChooseList(prevChooseList=> [...prevChooseList,data])
         } else {

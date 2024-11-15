@@ -17,7 +17,6 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true); // Thêm loading state
     useEffect(() => {
-        console.log("dang chay")
         try {
             const token = getJWT("token")
             if (!token) {
@@ -32,7 +31,6 @@ export const AuthProvider = ({ children }) => {
                         'Authorization': 'Bearer ' + token
                     },
                 });
-
                 if (!response.ok ) {
                     return null;
                 } else {

@@ -204,10 +204,14 @@ const Login = () => {
                 'Authorization' : 'Bearer ' + token
             },
         });
-
         if (response.ok) {
-            navigate("/")
-        } 
+            const userData = await response.text()
+            if (userData !== "") {
+                navigate("/")
+            }
+        } else {
+            console.error('Lỗi khi lấy thông tin người dùng:', response.status);
+        }
     }
     useEffect(() => {
         checkToken()
