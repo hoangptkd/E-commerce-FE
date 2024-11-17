@@ -2,7 +2,7 @@ import React, { useState,useEffect } from 'react';
 import axios from 'axios';
 import {Link, useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
-import {AuthProvider, getJWT, useMyContext} from "./AuthProvider";
+import {getJWT, useMyContext} from "./AuthProvider";
 
 const StyledDiv = styled.div`
     @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
@@ -69,7 +69,7 @@ const StyledDiv = styled.div`
         transition: 0s;
     }
 
-    section .signin
+    section .signup
     {
         position: absolute;
         width: 400px;
@@ -82,7 +82,7 @@ const StyledDiv = styled.div`
         border-radius: 4px;
         box-shadow: 0 15px 35px rgba(0,0,0,9);
     }
-    section .signin .content
+    section .signup .content
     {
         position: relative;
         width: 100%;
@@ -92,25 +92,25 @@ const StyledDiv = styled.div`
         flex-direction: column;
         gap: 40px;
     }
-    section .signin .content h2
+    section .signup .content h2
     {
         font-size: 2em;
         color: #0f0;
         text-transform: uppercase;
     }
-    section .signin .content .form
+    section .signup .content .form
     {
         width: 100%;
         display: flex;
         flex-direction: column;
         gap: 25px;
     }
-    section .signin .content .form .inputBox
+    section .signup .content .form .inputBox
     {
         position: relative;
         width: 100%;
     }
-    section .signin .content .form .inputBox input
+    section .signup .content .form .inputBox input
     {
         position: relative;
         width: 100%;
@@ -123,7 +123,7 @@ const StyledDiv = styled.div`
         font-weight: 500;
         font-size: 1em;
     }
-    section .signin .content .form .inputBox i
+    section .signup .content .form .inputBox i
     {
         position: absolute;
         left: 0;
@@ -133,31 +133,31 @@ const StyledDiv = styled.div`
         transition: 0.5s;
         pointer-events: none;
     }
-    .signin .content .form .inputBox input:focus ~ i,
-    .signin .content .form .inputBox input:valid ~ i
+    .signup .content .form .inputBox input:focus ~ i,
+    .signup .content .form .inputBox input:valid ~ i
     {
         transform: translateY(-7.5px);
         font-size: 0.8em;
         color: #fff;
     }
-    .signin .content .form .links
+    .signup .content .form .links
     {
         position: relative;
         width: 100%;
         display: flex;
         justify-content: space-between;
     }
-    .signin .content .form .links a
+    .signup .content .form .links a
     {
         color: #fff;
         text-decoration: none;
     }
-    .signin .content .form .links a:nth-child(2)
+    .signup .content .form .links a:nth-child(2)
     {
         color: #0f0;
         font-weight: 600;
     }
-    .signin .content .form .inputBox input[type="submit"]
+    .signup .content .form .inputBox input[type="submit"]
     {
         padding: 10px;
         background: #0f0;
@@ -188,72 +188,71 @@ const StyledDiv = styled.div`
         }
     }
 `;
-const Login = () => {
-    const {setIsAuthenticated } = useMyContext();
+const ForgotPassword = () => {
+    const {setIsAuthenticated, setUser } = useMyContext();
     const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [checkRemember,setCheckRemember] = useState(false)
     const [error, setError] = useState('');
+    const [step, setStep] = useState('getCode'); // 'getCode', 'verifyCode', 'changePassword'
+    const [code, setCode] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [countdown, setCountdown] = useState(120);
     const navigate = useNavigate();
-    const checkToken = async () => {
-        const token = getJWT("token");
-        const response = await fetch('http://localhost:9090/api/user/check', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization' : 'Bearer ' + token
-            },
-        });
-        if (response.ok) {
-            const userData = await response.text()
-            if (userData !== "") {
-                navigate("/")
-            }
-        } else {
-            console.error('Lỗi khi lấy thông tin người dùng:', response.status);
-        }
-    }
     useEffect(() => {
-        checkToken()
-    }, []);
-
-
-    const handleSubmit = async (e) => {
+        let timer;
+        if (step === 'verifyCode' && countdown > 0) {
+            timer = setInterval(() => {
+                setCountdown((prev) => prev - 1);
+            }, 1000);
+        }
+        return () => clearInterval(timer);
+    }, [step, countdown]);
+    const handleGetCode = async (e) => {
         e.preventDefault();
-        setError('');
         try {
-            const response = await fetch('http://localhost:9090/api/user/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({username, password}),
-            });
-            if (!response.ok) {
-                throw new Error('Login failed');
-            }
-            const token = await response.text();
-            if (token.includes("Login failed")) {
-                throw new Error('Login failed');
+            // Gửi yêu cầu đến API để lấy mã code
+            await axios.post(`http://localhost:9090/api/user/forgotPassword/${username}`);
+            setStep('verifyCode');
+            setCountdown(120);
+        } catch (err) {
+            setError('Failed to get code. Please try again.');
+        }
+    };
+
+    const handleVerifyCode = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post(`http://localhost:9090/api/user/forgotPassword/confirmCode/${username}?code=${code}`);
+            if (response.data !== 'fail') {
+                document.cookie = `token=${response.data}; path=/;`;
+                setStep('changePassword');
             } else {
-                setIsAuthenticated(true);
-                document.cookie = `token=${token}; path=/;`;
-                if (checkRemember) {
-                    localStorage.setItem("token", token);
-                }
-
-                navigate("/")
-
+                setError('Invalid code. Please try again.');
             }
         } catch (err) {
-            setError('Invalid username or password');
-            console.error('Login error:', err);
+            setError('Verification failed. Please try again.');
         }
+    };
 
+    const handleChangePassword = async (e) => {
+        e.preventDefault();
+        try {
+            const token = getJWT("token")
+            await axios.put(`http://localhost:9090/api/user/changeNewPassword?newPass=${newPassword}`,{}, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token,
+                },
+            });
+            setIsAuthenticated(true);
+            navigate('/');
+        } catch (err) {
+            setError('Failed to change password. Please try again.');
+        }
     };
     return (
         <StyledDiv>
-            <section><span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span>
+            <section>
+                <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span>
                 <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span>
                 <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span>
                 <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span>
@@ -292,43 +291,53 @@ const Login = () => {
                 <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span>
                 <span></span>
 
-                <div className="signin">
+                <div className="signup">
 
                     <div className="content">
-
-                        <h2>Sign In</h2>
+                        <h2>Forgot Password</h2>
                         <p>{error}</p>
-                        <form className="form" onSubmit={handleSubmit}>
+                        {step === 'getCode' && (
+                            <form className="form" onSubmit={handleGetCode}>
+                                <div className="inputBox">
+                                    <input type="text" required onChange={(e) => setUsername(e.target.value)}/>
+                                    <i>Username</i>
+                                </div>
+                                <div className="inputBox">
+                                    <input type="submit" value="Get Code"/>
+                                </div>
+                            </form>
+                        )}
 
-                            <div className="inputBox">
+                        {step === 'verifyCode' && (
+                            <form className="form" onSubmit={handleVerifyCode}>
+                                <div className="inputBox">
+                                    <input type="text" required onChange={(e) => setCode(e.target.value)}/>
+                                    <i>Enter Code</i>
+                                </div>
+                                {countdown > 0 ? (
+                                    <p>Time remaining: {countdown} seconds</p>
+                                ) : (
+                                    <div className="inputBox">
+                                        <button type="button" onClick={handleGetCode}>Get Code Again</button>
+                                    </div>
+                                )}
+                                <div className="inputBox">
+                                    <input type="submit" value="Verify Code"/>
+                                </div>
+                            </form>
+                        )}
 
-                                <input type="text" required onChange={(e) => setUsername(e.target.value)}/>
-                                <i>Username</i>
-
-                            </div>
-
-                            <div className="inputBox">
-
-                                <input type="password" required onChange={(e) => setPassword(e.target.value)}/>
-                                <i>Password</i>
-
-                            </div>
-                            <div>
-                                <input style={{marginRight:10}} type="checkbox" id = "remember"  onChange={()=>setCheckRemember((checkRemember)=> (!checkRemember))}/>
-                                <label for="remember">Remember me</label>
-                            </div>
-                            <div className="links">
-                                <Link to="/forgot">Forgot Password</Link>
-                                <Link to="/register">Sign up</Link>
-
-                            </div>
-
-                            <div className="inputBox">
-
-                                <input type="submit" value="Login"/>
-                            </div>
-
-                        </form>
+                        {step === 'changePassword' && (
+                            <form className="form" onSubmit={handleChangePassword}>
+                                <div className="inputBox">
+                                    <input type="password" required onChange={(e) => setNewPassword(e.target.value)}/>
+                                    <i>New Password</i>
+                                </div>
+                                <div className="inputBox">
+                                    <input type="submit" value="Change Password"/>
+                                </div>
+                            </form>
+                        )}
 
                     </div>
 
@@ -339,4 +348,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default ForgotPassword;

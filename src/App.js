@@ -22,6 +22,7 @@ import OrderHistory from "./component/Order";
 import LoginShop from "./component/shop/LoginShop";
 import {AuthProvider, setJWT} from "./component/security/AuthProvider";
 import UserProfile from "./component/security/UserProfile";
+import ForgotPassword from "./component/security/ForgotPassword";
 
 const App = () => {
     useEffect(() => {
@@ -38,6 +39,7 @@ const App = () => {
                                     <Route path="/" element={<Home/>}/>
                                     <Route path="/login" element={<Login/>}/>
                                     <Route path="/register" element={<Register/>}/>
+                                    <Route path="/forgot" element={<ForgotPassword/>}/>
                                     <Route path="/profile" element={<UserProfile/>}></Route>
                                     <Route path="/cart" element={<Cart/>}/>
                                     <Route path="/checkout" element={<Checkout/>}/>

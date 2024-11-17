@@ -3,7 +3,8 @@ import CartItem from "../cart/CartItem";
 import Checkout from "../Checkout";
 import {useNavigate} from "react-router-dom";
 import styled from 'styled-components';
-import {useMyContext} from "./AuthProvider";
+import {getJWT, useMyContext} from "./AuthProvider";
+import axios from "axios";
 
 
 const User = () => {
@@ -15,6 +16,13 @@ const User = () => {
     };
 
     const logout = ()=> {
+        const token = getJWT("token")
+        axios.post('http://localhost:9090/api/user/logout', {},{
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+
         localStorage.removeItem("token");
         document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC";
         navigate("/login");
