@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {BarChart2, Users, ShoppingBag, Package, Tag, Settings, LogOut, LineChart} from 'lucide-react';
-import Header from "./AdminHeader";
-import Sidebar from "./Sidebar";
 import DashboardLayout from "./DashboardLayout";
 import {getJWT} from "../security/AuthProvider";
 import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
+import { Users, Package, Tag } from 'lucide-react';
+import API_URL from "../../config";
 // Stats Card Component
 const StatsCard = ({ title, value, icon, color }) => {
     return (
@@ -101,7 +100,7 @@ const Dashboard = () => {
     const [data,setData] = useState([])
     const getQuantityData = async()=> {
         try {
-            const response = await fetch(`http://localhost:9090/api/order/getAllData`,
+            const response = await fetch(`${API_URL}/api/order/getAllData`,
                 {
                     method: 'GET',
                     headers: {
@@ -147,7 +146,7 @@ const Dashboard = () => {
         });
         const getAllUser = async () => {
             try {
-                const response = await fetch(`http://localhost:9090/api/admin/getAllUser?${params.toString()}`, {
+                const response = await fetch(`${API_URL}/api/admin/getAllUser?${params.toString()}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -170,7 +169,7 @@ const Dashboard = () => {
 
         const getAllProduct = async () => {
             try {
-                const response = await fetch(`http://localhost:9090/api/products/listAll?${params.toString()}`, {
+                const response = await fetch(`${API_URL}/api/products/listAll?${params.toString()}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -192,7 +191,7 @@ const Dashboard = () => {
         };
         const getAllOrder = async () => {
             try {
-                const response = await fetch(`http://localhost:9090/api/order/allOrder`, {
+                const response = await fetch(`${API_URL}/api/order/allOrder`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

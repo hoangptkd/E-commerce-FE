@@ -1,7 +1,7 @@
 import {useNavigate} from "react-router-dom";
 import {useEffect} from "react";
 import {getJWT, useMyContext} from "../security/AuthProvider";
-
+import API_URL from "../../config";
 
 export function useCheckShop() {
     const navigate = useNavigate();
@@ -9,7 +9,7 @@ export function useCheckShop() {
     useEffect(() => {
         const checkRoles = async () => {
             const token = getJWT("token");
-            const response = await fetch('http://localhost:9090/api/user/checkShop', {
+            const response = await fetch(`${API_URL}/api/user/checkShop`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

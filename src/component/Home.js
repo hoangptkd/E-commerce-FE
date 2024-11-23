@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import "./ProductCart.css";
 import ProductCard from "./ProductCard";
-import {useMyContext} from "./security/AuthProvider";
+import API_URL from "../config";
 const Home = () => {
-    const { isAuthenticated, setIsAuthenticated,user } = useMyContext();
     const [products, setProducts] = useState([]);
     const [specialCategory,setSpecialCategory] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -12,7 +11,7 @@ const Home = () => {
     useEffect(()=> {
         const fetchTopCategories = async () => {
             try {
-                const response = await fetch('http://localhost:9090/api/products/getTopCategories', {
+                const response = await fetch(`${API_URL}/api/products/getTopCategories`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -32,7 +31,7 @@ const Home = () => {
         fetchTopCategories()
         const fetchProducts = async () => {
             try {
-                const response = await fetch('http://localhost:9090/api/products/listSpecial', {
+                const response = await fetch(`${API_URL}/api/products/listSpecial`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -51,7 +50,7 @@ const Home = () => {
         };
         const fetchNewProducts = async () => {
             try {
-                const response = await fetch('http://localhost:9090/api/products/listNew', {
+                const response = await fetch(`${API_URL}/api/products/listNew`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

@@ -1,9 +1,9 @@
 import React, { useState,useEffect } from 'react';
 import axios from 'axios';
-import {Link, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
 import {getJWT, useMyContext} from "./AuthProvider";
-
+import API_URL from "../../config";
 const StyledDiv = styled.div`
     @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
     *
@@ -210,7 +210,7 @@ const ForgotPassword = () => {
         e.preventDefault();
         try {
             // Gửi yêu cầu đến API để lấy mã code
-            await axios.post(`http://localhost:9090/api/user/forgotPassword/${username}`);
+            await axios.post(`${API_URL}/api/user/forgotPassword/${username}`);
             setStep('verifyCode');
             setCountdown(120);
         } catch (err) {
@@ -221,7 +221,7 @@ const ForgotPassword = () => {
     const handleVerifyCode = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`http://localhost:9090/api/user/forgotPassword/confirmCode/${username}?code=${code}`);
+            const response = await axios.post(`${API_URL}/api/user/forgotPassword/confirmCode/${username}?code=${code}`);
             if (response.data !== 'fail') {
                 document.cookie = `token=${response.data}; path=/;`;
                 setStep('changePassword');
@@ -237,7 +237,7 @@ const ForgotPassword = () => {
         e.preventDefault();
         try {
             const token = getJWT("token")
-            await axios.put(`http://localhost:9090/api/user/changeNewPassword?newPass=${newPassword}`,{}, {
+            await axios.put(`${API_URL}/api/user/changeNewPassword?newPass=${newPassword}`,{}, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + token,

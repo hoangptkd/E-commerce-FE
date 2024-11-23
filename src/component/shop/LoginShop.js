@@ -1,7 +1,7 @@
-import {useEffect, useState} from 'react';
-import {Lock, Mail, UserIcon} from 'lucide-react';
+import {useState} from 'react';
+import {Lock, UserIcon} from 'lucide-react';
 import {useNavigate} from "react-router-dom";
-
+import API_URL from "../../config";
 const LoginShop = () => {
 
 
@@ -14,7 +14,7 @@ const LoginShop = () => {
         e.preventDefault();
         setError('');
         try {
-            const response = await fetch('http://localhost:9090/api/user/login', {
+            const response = await fetch(`${API_URL}/api/user/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

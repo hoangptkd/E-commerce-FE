@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {ConvertAddress} from "./convert/Convert";
 import {getJWT, useMyContext} from "./security/AuthProvider";
 import {useNavigate} from "react-router-dom";
+import API_URL from "../config";
 
 const OrderHistory = () => {
     // Mock data - trong thực tế sẽ lấy từ API
@@ -11,7 +11,7 @@ const OrderHistory = () => {
     useEffect(()=> {
         const getOrderFromApi = async ()=> {
             const token = getJWT("token")
-            const response = await fetch(`http://localhost:9090/api/order/allOrderFromUser`, {
+            const response = await fetch(`${API_URL}/api/order/allOrderFromUser`, {
                 method: "GET",
                 headers: {
                     'Content-type' : 'application/json',

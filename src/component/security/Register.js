@@ -1,8 +1,7 @@
-import React, { useState,useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
-
+import API_URL from "../../config";
 const StyledDiv = styled.div`
     @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
     *
@@ -201,7 +200,7 @@ const Register = () => {
         e.preventDefault();
         setError('');
         try {
-            const response = await fetch('http://localhost:9090/api/user/signup', {
+            const response = await fetch(`${API_URL}/api/user/signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

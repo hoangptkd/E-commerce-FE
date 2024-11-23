@@ -1,5 +1,5 @@
 import React, {createContext, useState, useEffect, useContext} from 'react';
-
+import API_URL from "../../config";
 export const AuthContext = createContext();
 export const getJWT = (name)=> {
     const value = `; ${document.cookie}`;
@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
                 return;
             }
             const checkToken = async () => {
-                const response = await fetch('http://localhost:9090/api/user/check', {
+                const response = await fetch(`${API_URL}/api/user/check`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

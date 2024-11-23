@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from "react";
-import {ConvertTimeStamp,ConvertAddress} from "../convert/Convert";
+import {ConvertTimeStamp} from "../convert/Convert";
 import { Modal, Button } from 'react-bootstrap';
 import {getJWT} from "../security/AuthProvider";
+import API_URL from "../../config";
 const OrderManager = () => {
     const [orders, setOrders] = useState([]);
     const [show, setShow] = useState(false);
@@ -16,7 +17,7 @@ const OrderManager = () => {
             page:page,
         });
 
-        const response = await fetch(`http://localhost:9090/api/order/allOrderByShop?${params}`, {
+        const response = await fetch(`${API_URL}/api/order/allOrderByShop?${params}`, {
             method: "GET",
             headers: {
                 'Content-type' : 'application/json',
@@ -56,7 +57,7 @@ const OrderManager = () => {
         const params = new URLSearchParams({
             orderId: selectedOrder.id
         }).toString();
-        const response = await fetch(`http://localhost:9090/api/order/editOrder/${deliveryStatus}?${params}`, {
+        const response = await fetch(`${API_URL}/api/order/editOrder/${deliveryStatus}?${params}`, {
             method: "PUT",
             headers: {
                 'Content-type' : 'application/json',

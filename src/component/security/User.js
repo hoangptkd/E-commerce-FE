@@ -1,11 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import CartItem from "../cart/CartItem";
-import Checkout from "../Checkout";
+import React, {useState} from 'react';
 import {useNavigate} from "react-router-dom";
-import styled from 'styled-components';
 import {getJWT, useMyContext} from "./AuthProvider";
 import axios from "axios";
-
+import API_URL from "../../config";
 
 const User = () => {
     const { isAuthenticated, setIsAuthenticated,user } = useMyContext();
@@ -17,7 +14,7 @@ const User = () => {
 
     const logout = ()=> {
         const token = getJWT("token")
-        axios.post('http://localhost:9090/api/user/logout', {},{
+        axios.post(`${API_URL}/api/user/logout`, {},{
             headers: {
                 'Authorization': `Bearer ${token}`
             }

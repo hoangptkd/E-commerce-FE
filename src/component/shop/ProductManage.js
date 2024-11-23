@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import {getJWT} from "../security/AuthProvider";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-
+import API_URL from "../../config";
 
 const ProductManage = () => {
     const navigate = useNavigate();
@@ -51,7 +51,7 @@ const ProductManage = () => {
         }
         const getCategories = async () => {
             try {
-                const response = await fetch('http://localhost:9090/api/products/getAllCategories', {
+                const response = await fetch('${API_URL}/api/products/getAllCategories', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ const ProductManage = () => {
 
             let response;
             if (!product.id) {
-                 response = await fetch('http://localhost:9090/api/products/add', {
+                 response = await fetch('${API_URL}/api/products/add', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -95,7 +95,7 @@ const ProductManage = () => {
                     body: JSON.stringify(product)
                 });
             } else {
-                response = await fetch(`http://localhost:9090/api/products/update/${product.id}`, {
+                response = await fetch(`${API_URL}/api/products/update/${product.id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -129,7 +129,7 @@ const ProductManage = () => {
     const handleUpload = async () => {
         const formData = new FormData();
         formData.append("image", selectedFile);
-        const response = await fetch("http://localhost:9090/api/images/upload", {
+        const response = await fetch("${API_URL}/api/images/upload", {
             method: "POST",
             body: formData
         });

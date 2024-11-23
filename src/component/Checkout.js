@@ -1,9 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {json, Link, useLocation, useNavigate} from "react-router-dom";
-import CartItem from "./cart/CartItem";
+import {useLocation, useNavigate} from "react-router-dom";
 import ItemCheckOut from "./ItemCheckOut";
-import cart from "./cart/Cart";
-import cartItem from "./cart/CartItem";
+import API_URL from "../config";
 import {
     MapPin as MapPinIcon,
     PlusCircle as PlusCircleIcon,
@@ -156,7 +154,7 @@ const Checkout = () => {
     };
     const checkOrder = async ()=> {
         try {
-            const response = await fetch('http://localhost:9090/api/order/create', {
+            const response = await fetch(`${API_URL}/api/order/create`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

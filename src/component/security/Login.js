@@ -1,9 +1,8 @@
-import React, { useState,useEffect } from 'react';
-import axios from 'axios';
+import React, {useEffect, useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
-import {AuthProvider, getJWT, useMyContext} from "./AuthProvider";
-
+import {getJWT, useMyContext} from "./AuthProvider";
+import API_URL from "../../config";
 const StyledDiv = styled.div`
     @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
     *
@@ -197,7 +196,7 @@ const Login = () => {
     const navigate = useNavigate();
     const checkToken = async () => {
         const token = getJWT("token");
-        const response = await fetch('http://localhost:9090/api/user/check', {
+        const response = await fetch(`${API_URL}/api/user/check`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -222,7 +221,7 @@ const Login = () => {
         e.preventDefault();
         setError('');
         try {
-            const response = await fetch('http://localhost:9090/api/user/login', {
+            const response = await fetch(`${API_URL}/api/user/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

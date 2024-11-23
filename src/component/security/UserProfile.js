@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {getJWT, useMyContext} from "./AuthProvider";
-import {ConvertAddress, ConvertTimeStamp} from "../convert/Convert";
-import {Button, Modal, ModalFooter, ModalHeader, ModalTitle} from "react-bootstrap";
+import {ConvertAddress} from "../convert/Convert";
+import {Button} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
+import API_URL from "../../config";
 const UserProfile = () => {
     const navigate = useNavigate();
     const CITIES = {
@@ -98,7 +99,7 @@ const UserProfile = () => {
                 currentPass:currentPass,
                 newPass: newPass
             });
-            const response = await fetch(`http://localhost:9090/api/user/changePassword?${params}`, {
+            const response = await fetch(`${API_URL}/api/user/changePassword?${params}`, {
                 method: "PUT",
                 headers: {
                     'Content-type' : 'application/json',
@@ -256,7 +257,7 @@ const UserProfile = () => {
     useEffect(()=> {
         const editProfile = async ()=> {
             const token = getJWT("token")
-            const response = await fetch(`http://localhost:9090/api/user/updateProfile`, {
+            const response = await fetch(`${API_URL}/api/user/updateProfile`, {
                 method: "PUT",
                 headers: {
                     'Content-type' : 'application/json',
@@ -269,7 +270,7 @@ const UserProfile = () => {
                 alert('Không thể cập nhật thông tin');
                 throw new Error("Không thể cập nhật thông tin")
             }
-            const response1 = await fetch('http://localhost:9090/api/user/check', {
+            const response1 = await fetch('${API_URL}/api/user/check', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

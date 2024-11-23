@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import CartItem from "./CartItem";
-import Checkout from "../Checkout";
 import {useNavigate} from "react-router-dom";
 import {getJWT, useMyContext} from "../security/AuthProvider";
-
+import API_URL from "../../config";
 const Cart = () => {
     const navigate = useNavigate();
     const { isAuthenticated, setIsAuthenticated, loading } = useMyContext();
@@ -14,7 +13,7 @@ const Cart = () => {
     const fetchCarts = async () => {
         const token = getJWT("token")
         try {
-            const response = await fetch('http://localhost:9090/api/cart/allByUser', {
+            const response = await fetch(`${API_URL}/api/cart/allByUser`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

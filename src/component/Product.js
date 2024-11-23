@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import ProductCard from "./ProductCard";
 import {useLocation} from "react-router-dom";
-
+import API_URL from "../config";
 const Product = () => {
     const location = useLocation();
     const searchValue = location.state;
@@ -40,6 +40,8 @@ const Product = () => {
         setError('');
     };
     useEffect(()=> {
+        console.log("REACT_APP_API_URL:", process.env.REACT_APP_API_URL);
+
         const params = new URLSearchParams({
             name: searchValue,
             categoryId: selectCategoryId,
@@ -72,7 +74,7 @@ const Product = () => {
         }
         const fetchGetCategories = async ()=> {
             try {
-                const response = await fetch(`http://localhost:9090/api/products/getCategories?${params.toString()}`, {
+                const response = await fetch(`${API_URL}/api/products/getCategories?${params.toString()}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -92,7 +94,7 @@ const Product = () => {
         fetchGetCategories();
         const fetchProducts = async () => {
             try {
-                const response = await fetch(`http://localhost:9090/api/products/search?${params.toString()}`,
+                const response = await fetch(`${API_URL}/api/products/search?${params.toString()}`,
                     {
                     method: 'GET',
                     headers: {
@@ -113,6 +115,7 @@ const Product = () => {
         };
 
         fetchProducts();
+
     }, [searchValue,selectCategoryId,priceFrom,priceTo,page,sortOption]);
 
 

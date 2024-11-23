@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react";
 import DashboardLayout from "./DashboardLayout";
-import { Search, Plus, Edit, Lock, Unlock, Trash, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, Edit, Lock, Unlock, ChevronLeft, ChevronRight } from 'lucide-react';
 import './UsersManager.css';
 import {ConvertTimeStamp} from "../convert/Convert";
 import {getJWT} from "../security/AuthProvider";
-
+import API_URL from "../../config";
 // Status Badge Component
 const StatusBadge = ({ status }) => {
     const statusClasses = {
@@ -35,7 +35,7 @@ const UserRow = ({ user }) => {
                 status: status
             }).toString();
             try {
-                const response = await fetch(`http://localhost:9090/api/admin/editStatus/${id}?${params}`,
+                const response = await fetch(`${API_URL}/api/admin/editStatus/${id}?${params}`,
                     {
                         method: 'PUT',
                         headers: {
@@ -143,7 +143,7 @@ const UsersManager = () => {
         const token = getJWT("token")
         const getAllUser = async () => {
             try {
-                const response = await fetch(`http://localhost:9090/api/admin/getAllUser?${params.toString()}`, {
+                const response = await fetch(`${API_URL}/api/admin/getAllUser?${params.toString()}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

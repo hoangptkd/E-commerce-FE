@@ -3,6 +3,7 @@ import {useState,useEffect} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import {getJWT, useMyContext} from "./security/AuthProvider";
 import { ShoppingCart, X } from 'lucide-react';
+import API_URL from "../config";
 const ProductDetail = ()=> {
     const location = useLocation(); // Lấy location object
     const product = location.state;
@@ -26,7 +27,7 @@ const ProductDetail = ()=> {
         }
         const fetchNewProducts = async () => {
             try {
-                const response = await fetch(`http://localhost:9090/api/products/${product.id}/similar`, {
+                const response = await fetch(`${API_URL}/api/products/${product.id}/similar`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -57,7 +58,7 @@ const ProductDetail = ()=> {
                 return
             }
             const token = getJWT("token")
-            const response = await fetch("http://localhost:9090/api/cart/add", {
+            const response = await fetch(`${API_URL}/api/cart/add`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

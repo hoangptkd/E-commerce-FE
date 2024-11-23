@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
-import {NavLink, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {useCheckShop} from "./CheckShop";
 import {getJWT} from "../security/AuthProvider";
 
-
+import API_URL from "../../config";
 const ShopDashBoard = () => {
     useCheckShop()
     const navigate = useNavigate()
@@ -13,7 +13,7 @@ const ShopDashBoard = () => {
     const getProducts = async()=> {
         try {
 
-            const response = await fetch(`http://localhost:9090/api/products/listByShop`,
+            const response = await fetch(`${API_URL}/api/products/listByShop`,
                 {
                     method: 'GET',
                     headers: {
@@ -34,7 +34,7 @@ const ShopDashBoard = () => {
     }
     const getQuantityData = async()=> {
         try {
-            const response = await fetch(`http://localhost:9090/api/order/getQuantityData`,
+            const response = await fetch(`${API_URL}/api/order/getQuantityData`,
                 {
                     method: 'GET',
                     headers: {
@@ -63,7 +63,7 @@ const ShopDashBoard = () => {
     const ProductDelete = async (id)=> {
         try {
 
-            const response = await fetch(`http://localhost:9090/api/products/delete/${id}`,
+            const response = await fetch(`${API_URL}/api/products/delete/${id}`,
                 {
                     method: 'DELETE',
                     headers: {

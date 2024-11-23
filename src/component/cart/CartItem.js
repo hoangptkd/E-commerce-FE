@@ -1,7 +1,7 @@
 import React from "react"
 import {useState,useEffect} from "react";
 import {getJWT} from "../security/AuthProvider";
-
+import API_URL from "../../config";
 
 function CartItem({cartItem,onSetTotal,onSetRender}) {
     const [quantity, setQuantity] = useState(cartItem.quantity);
@@ -18,7 +18,7 @@ function CartItem({cartItem,onSetTotal,onSetRender}) {
                 if (!isFirstRender) {
                     console.log({cardItemId: cartItem.id, quantity: quantity})
                     try {
-                        const response = await fetch("http://localhost:9090/api/cart/updateQuantity", {
+                        const response = await fetch(`${API_URL}/api/cart/updateQuantity`, {
                             method: "PUT",
                             headers: {
                                 "Content-Type": "application/json",
@@ -62,7 +62,7 @@ function CartItem({cartItem,onSetTotal,onSetRender}) {
     const handleDelete = async() => {
         try {
             onSetRender()
-            const response = await fetch(`http://localhost:9090/api/cart/delete/${cartItem.id}`, {
+            const response = await fetch(`${API_URL}/api/cart/delete/${cartItem.id}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
